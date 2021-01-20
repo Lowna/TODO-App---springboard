@@ -1,6 +1,26 @@
 const todoContainer = document.querySelector('#todos');
 const addItemForm = document.querySelector('#addTodo');
 const inputTodo = document.querySelector('#addItem');
+
+//add local storage
+//function that adds the todos to local storage
+
+// Retrieve
+if (localStorage.getItem('todo') != null) {
+	// document.getElementById('todos').innerHTML = localStorage.getItem('todo');
+	let items = localStorage.getItem('todo').split(',');
+	for (let i = 0; i < items.length; i++) {
+		const newItem = document.createElement('li');
+		const removeBtn = document.createElement('button');
+		removeBtn.innerText = 'x';
+		removeBtn.classList.add('delete');
+		newItem.innerText = items[i];
+		newItem.className = 'todo';
+		newItem.appendChild(removeBtn);
+
+		todoContainer.appendChild(newItem);
+	}
+}
 //this is the delete btn
 todoContainer.addEventListener('click', function(e) {
 	if (e.target.tagName === 'BUTTON') {
@@ -20,47 +40,15 @@ addItemForm.addEventListener('submit', function(e) {
 	newItem.innerText = inputTodo.value;
 	newItem.className = 'todo';
 	newItem.appendChild(removeBtn);
-	inputTodo.value = '';
+
 	todoContainer.appendChild(newItem);
+	let localStorageString;
+	if (localStorage.getItem('todo') != null) {
+		localStorageString = localStorage.getItem('todo') + ',' + inputTodo.value;
+	} else {
+		localStorageString = inputTodo.value;
+	}
+	//local storage
+	localStorage.setItem('todo', localStorageString);
+	inputTodo.value = '';
 });
-
-/* verson of todo list without event delegation */
-// const removeItem = document.querySelectorAll('.todos li');
-// const todoContainer = document.querySelector('#todos');
-// const addItemForm = document.querySelector('#addTodo');
-// const inputTodo = document.querySelector('#addItem');
-// //this is the delete btn
-// for (let deleteBtn of removeItem) {
-// 	deleteBtn.addEventListener('click', function(e) {
-// 		e.target.parentElement.remove();
-// 		console.log(e);
-// 	});
-// }
-
-// // this adds items to the todo
-// addItemForm.addEventListener('submit', function(e) {
-// 	e.preventDefault();
-// 	console.log(inputTodo.value);
-// 	const newItem = document.createElement('li');
-// 	const removeBtn = document.createElement('button');
-// 	removeBtn.innerText = 'x';
-// 	removeBtn.addEventListener('click', function(e) {
-// 		e.target.parentElement.remove();
-// 	});
-// 	newItem.innerText = inputTodo.value;
-// 	newItem.className = 'todo';
-// 	newItem.appendChild(removeBtn);
-// 	inputTodo.value = '';
-// 	todoContainer.appendChild(newItem);
-// });
-/*This represents toggling for anything*/
-// const emotion = document.querySelector('h2');
-// setInterval(function() {
-// 	if (emotion.classList.contains('big')) {
-// 		emotion.innerText = 'sad'.toUpperCase();
-// 	} else {
-// 		emotion.innerText = 'happy'.toUpperCase();
-// 	}
-// 	emotion.classList.toggle('big');
-// 	emotion.classList.toggle('small');
-// }, 500);
